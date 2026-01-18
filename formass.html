@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy Interactive Quiz</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #34495e; --accent: #3498db; --success: #27ae60; --error: #e74c3c; --text: #ecf0f1; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        
+        #nav-container { width: 180px; background: var(--primary); display: flex; flex-direction: column; justify-content: center; gap: 15px; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        .nav-btn { padding: 12px; border: none; background: var(--accent); color: white; cursor: pointer; border-radius: 6px; font-weight: bold; transition: 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-btn:hover { background: #2980b9; transform: translateY(-2px); }
+
+        #slide-view { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 30px; position: relative; }
+        .slide { background: white; width: 95%; max-width: 900px; min-height: 580px; padding: 40px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: none; flex-direction: column; animation: fadeIn 0.4s ease-out; position: absolute; overflow-y: auto; }
+        .active { display: flex; }
+
+        h1 { color: var(--primary); border-bottom: 4px solid var(--accent); padding-bottom: 10px; margin-top: 0; font-size: 1.8rem; }
+        h2 { color: var(--accent); font-size: 1.2rem; margin-top: 0; }
+        .question-text { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; color: #2c3e50; background: #f8f9fa; padding: 15px; border-left: 5px solid var(--primary); }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .option-btn { padding: 15px; border: 2px solid #edf2f7; border-radius: 8px; cursor: pointer; background: #ffffff; text-align: left; transition: 0.2s; font-size: 0.95rem; color: #4a5568; }
+        .option-btn:hover { border-color: var(--accent); background: #f0f7ff; color: var(--primary); }
+
+        #feedback-box { margin-top: 20px; padding: 18px; border-radius: 8px; display: none; font-size: 1rem; line-height: 1.5; animation: slideUp 0.3s ease; }
+        .correct { background: #defadb; color: #1e4620; border: 1px solid #7ed321; }
+        .incorrect { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="nav-container">
+    <button class="nav-btn" onclick="prevSlide()">← Back</button>
+    <button class="nav-btn" onclick="nextSlide()">Next →</button>
+</div>
+
+<div id="slide-view">
+    <div class="slide active">
+        <h1>Philosophy Quiz</h1>
+        <p class="question-text">Situational items on Truth, Methods, and Justification.</p>
+        <p><strong>Instructions:</strong> Use the sidebar to navigate. Select an answer to reveal the philosophical justification behind the scenario.</p>
+    </div>
+
+    <div class="slide">
+        <h2>Question 1</h2>
+        <p class="question-text">A detective finds a fingerprint at a crime scene that matches the suspect’s right index finger. He concludes it is true the suspect was at the scene. This conclusion relies on which theory?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Coherence checks for internal logic, not physical matches.')">A) Coherence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Pragmatism checks if a belief works, not if it is factually accurate.')">B) Pragmatic Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Correspondence theory states truth matches a fact in the physical world.')">C) Correspondence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction is about general concepts, not specific physical forensic evidence.')">D) Philosophical Abstraction</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 2</h2>
+        <p class="question-text">A theologian argues that a specific doctrine is true because it is consistent with every other verse in their holy book and does not create any logical contradictions within their faith. This is an example of:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Coherence theory defines truth as internal consistency within a specific system.')">A) Coherence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Scientific truth requires empirical testing against nature.')">B) Scientific Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis clarifies language but is not a theory of truth.')">C) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Correspondence would require external proof outside the book\'s internal logic.')">D) Correspondence Theory</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 3</h2>
+        <p class="question-text">In a medical trial, a doctor argues that "Treatment X is the true cure for this disease" because patients who take it recover faster, return to work sooner, and report higher life satisfaction. This approach to truth is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction identifies the nature of a disease, not its successful treatment.')">A) Abstract</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Pragmatic theory focuses on practical results and the utility of a belief.')">B) Pragmatic</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Coherence focuses on logic; the doctor is focused on the patients\' outcome.')">C) Coherent</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analytic methods clarify terms; they don\'t test cures.')">D) Analytic</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 4</h2>
+        <p class="question-text">Consider these two statements: (I) "Chocolate is the best ice cream flavor." (II) "Water boils at 100°C at sea level." How are these distinguished?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Flavor preference is a subjective matter, not a philosophical truth.')">A) (I) Philosophical Truth; (II) Scientific Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Statement I is subjective (Opinion), while Statement II is an objective fact (Truth).')">B) (I) is an Opinion; (II) is a Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'These describe theories of verification, not the status of the statements.')">C) (I) is a Correspondence; (II) is a Coherence</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Boiling points are objective physical laws, not opinions.')">D) Both are opinions</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 5</h2>
+        <p class="question-text">A biologist studies the chemical reactions in the brain that cause the feeling of love. A philosopher asks, "What is the nature of love itself and its role in a meaningful life?" The philosopher is seeking:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Science deals with the mechanisms (chemicals), not the ultimate meaning.')">A) Scientific Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The question isn\'t about if love is useful, but what it essentially is.')">B) Pragmatic Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Philosophical truth addresses questions of essence and value.')">C) Philosophical Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Philosophy seeks deep truth, not just a reasonably supported opinion.')">D) Justified Opinion</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 6</h2>
+        <p class="question-text">You are discussing "Beauty." Instead of listing pretty objects like flowers or paintings, you try to identify the single, universal quality that makes anything beautiful. This mental process is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Justification defends an answer; it doesn\'t form the concept.')">A) Philosophical Justification</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis breaks down parts; this builds a general universal concept.')">B) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Correspondence is a truth theory, not a concept-forming process.')">C) Correspondence</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Abstraction strips away concrete details to find the essence.')">D) Philosophical Abstraction</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 7</h2>
+        <p class="question-text">A philosopher is presented with the statement "The King of France is bald." Instead of looking for the King, the philosopher examines the logical structure of the sentence to see if "The King of France" even refers to a real entity. This is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Analysis examines language and logic to clarify meaning.')">A) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Looking for the physical King would be Correspondence.')">B) Correspondence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'This focuses on specific language, not a universal generalization.')">C) Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Science uses observation; this is a logical critique.')">D) Scientific Method</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 8</h2>
+        <p class="question-text">When asked why it is wrong to steal, a student provides a series of logical arguments based on property rights, social stability, and the Categorical Imperative. This process of providing "proof" for a belief is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction defines what theft is, not why it\'s wrong.')">A) Philosophical Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Justification is the act of providing a rational defense for a belief.')">B) Philosophical Justification</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Coherence is a theory of truth, while Justification is the method of defending it.')">C) Coherence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Logical arguments based on duty and social stability go beyond mere opinion.')">D) Opinion Sharing</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 9</h2>
+        <p class="question-text">You believe it will rain today because you saw dark clouds (Correspondence), the weather app says 90% chance (Coherence), and bringing an umbrella will save your clothes (Pragmatic). Using all three is an example of:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'This is a concrete application, not a move to general essences.')">A) Philosophical Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! These are different ways we use to prove and confirm truth.')">B) Ways of Proving Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Reductionism simplifies things; this combines different theories.')">C) Scientific Reductionism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The use of systems and evidence makes this a truth-seeking method.')">D) Subjective Opinion</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 10</h2>
+        <p class="question-text">A leader is deciding whether to implement a strict lockdown. He decides to do so because, although it restricts individual freedom, it will result in the greatest number of lives saved and the fastest economic recovery for the most people. What philosophical justification is used to arrive at this decision?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Deontology would focus on the absolute right/wrong of the action itself (like freedom), regardless of the results.')">A) Deontology</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Consequentialism justifies an action based on its results, specifically aiming for the best outcome for the greatest number.')">B) Consequentialism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis is the method of breaking down definitions, not a system for moral decision-making.')">C) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction is about finding universal essences, not calculating the benefits of a lockdown.')">D) Philosophical Abstraction</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h1>Final Review</h1>
+        <p class="question-text">You have completed the module. Remember these key distinctions:</p>
+        <ul>
+            <li><strong>Correspondence:</strong> Truth matches physical facts.</li>
+            <li><strong>Coherence:</strong> Truth matches an internal logical system.</li>
+            <li><strong>Pragmatic:</strong> Truth is found in what works or is useful.</li>
+            <li><strong>Deontology:</strong> Justification based on duty/rules.</li>
+            <li><strong>Consequentialism:</strong> Justification based on results/outcomes.</li>
+        </ul>
+        <button class="nav-btn" style="margin-top: 20px; width: 100%;" onclick="currentSlide=0; showSlide(0);">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    function showSlide(index) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[index].classList.add('active');
+        const fb = slides[index].querySelector('#feedback-box');
+        if(fb) { fb.style.display = 'none'; fb.innerText = ''; }
+        const buttons = slides[index].querySelectorAll('.option-btn');
+        buttons.forEach(b => { b.style.opacity = "1"; b.style.borderColor = "#edf2f7"; });
+    }
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; showSlide(currentSlide); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; showSlide(currentSlide); } }
+    function showFeedback(btn, isCorrect, text) {
+        const slide = btn.closest('.slide');
+        const fb = slide.querySelector('#feedback-box');
+        fb.style.display = 'block';
+        fb.className = isCorrect ? 'correct' : 'incorrect';
+        fb.innerHTML = (isCorrect ? "<strong>✔️ Correct:</strong> " : "<strong>❌ Incorrect:</strong> ") + text;
+        const buttons = slide.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.style.opacity = "0.7");
+        btn.style.opacity = "1";
+        btn.style.borderColor = isCorrect ? "#27ae60" : "#e74c3c";
+    }
+</script>
+
+</body>
+</html>

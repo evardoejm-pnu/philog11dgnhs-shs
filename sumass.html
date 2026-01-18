@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy Comprehensive Exam</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #34495e; --accent: #3498db; --success: #27ae60; --error: #e74c3c; --text: #ecf0f1; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        
+        #nav-container { width: 180px; background: var(--primary); display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        .nav-btn { padding: 10px; border: none; background: var(--accent); color: white; cursor: pointer; border-radius: 6px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; text-transform: uppercase; }
+        .nav-btn:hover { background: #2980b9; transform: translateY(-2px); }
+
+        #slide-view { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .slide { background: white; width: 95%; max-width: 900px; height: 90vh; padding: 30px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: none; flex-direction: column; animation: fadeIn 0.4s ease-out; position: absolute; overflow-y: auto; }
+        .active { display: flex; }
+
+        h1 { color: var(--primary); border-bottom: 4px solid var(--accent); padding-bottom: 5px; margin-top: 0; font-size: 1.5rem; }
+        h2 { color: var(--accent); font-size: 1.1rem; margin-top: 0; }
+        .question-text { font-size: 1rem; margin-bottom: 20px; line-height: 1.5; color: #2c3e50; background: #f8f9fa; padding: 15px; border-left: 5px solid var(--primary); }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .option-btn { padding: 12px; border: 2px solid #edf2f7; border-radius: 8px; cursor: pointer; background: #ffffff; text-align: left; transition: 0.2s; font-size: 0.9rem; color: #4a5568; }
+        .option-btn:hover { border-color: var(--accent); background: #f0f7ff; color: var(--primary); }
+
+        #feedback-box { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; font-size: 0.9rem; line-height: 1.4; animation: slideUp 0.3s ease; }
+        .correct { background: #defadb; color: #1e4620; border: 1px solid #7ed321; }
+        .incorrect { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="nav-container">
+    <button class="nav-btn" onclick="prevSlide()">← Back</button>
+    <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    <div style="color: white; font-size: 0.7rem; margin-top: 20px; text-align: center;">Item <span id="item-num">1</span> / 20</div>
+</div>
+
+<div id="slide-view">
+    <div class="slide active">
+        <h2>Question 1</h2>
+        <p class="question-text">A scientist predicts an eclipse will occur at 3:00 PM. When the moon covers the sun at exactly that time, we say the prediction was true. This relies on:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Coherence theory checks if the claim fits into a logical system, but the physical event itself is what proves it here.')">A) Coherence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Pragmatic theory defines truth by how useful the belief is, not by factual occurrence.')">B) Pragmatic Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Correspondence theory states that a statement is true if it matches a fact or event in the physical world.')">C) Correspondence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis is a method of clarifying language, not a theory of truth.')">D) Philosophical Analysis</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 2</h2>
+        <p class="question-text">A mathematician argues that a new theorem is true because it follows perfectly from established axioms and doesn't contradict any existing laws of algebra. This is an example of:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Correspondence would require a physical object to point to; math relies on internal logic.')">A) Correspondence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Coherence theory holds that truth is a matter of how well a belief fits into an existing system without contradiction.')">B) Coherence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The mathematician is proving it via logic, not via its practical success or utility.')">C) Pragmatic Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Scientific truth requires empirical testing in nature; math is a formal system.')">D) Scientific Truth</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 3</h2>
+        <p class="question-text">A business owner believes a new \"No-Meeting Friday\" policy is a true success because employee productivity increased by 20% and staff burnout rates dropped. This is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Coherent truth focuses on the policy\'s logic; the owner is looking at the tangible results.')">A) Coherent</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction is about finding universal essences, not measuring business metrics.')">B) Abstract</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Pragmatic truth defines something as true if it works in practice and produces successful or beneficial results.')">C) Pragmatic</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis breaks down definitions; the owner is evaluating effectiveness.')">D) Analytic</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 4</h2>
+        <p class="question-text">Statement I: \"The movie was way too long.\" Statement II: \"The movie is 142 minutes long.\" How are these distinguished?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Statement I is a subjective personal preference (Opinion), while Statement II is an objective, measurable fact (Truth).')">A) (I) is an Opinion; (II) is a Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The time measurement is an objective fact, not an opinion.')">B) (I) is a Truth; (II) is an Opinion</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'These are categories of truth verification, not the status of the sentences.')">C) (I) is a Correspondence; (II) is a Coherence</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'While the duration is a scientific fact, the \"boringness\" is entirely subjective.')">D) Both are Scientific Truths</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 5</h2>
+        <p class="question-text">A psychologist studies how dopamine levels change when we feel \"joy.\" A philosopher asks, \"Is joy a necessary component of a life well-lived?\" The philosopher is seeking:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Science explains the physical mechanisms (dopamine), not the value or meaning.')">A) Scientific Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Philosophical truth addresses questions of value, ethics, and the nature of concepts beyond physical data.')">B) Philosophical Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The question is about the essence of a good life, not just whether joy is useful.')">C) Pragmatic Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The philosopher is seeking a universal insight, not just a personal feeling.')">D) Subjective Opinion</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 6</h2>
+        <p class="question-text">You are studying \"Justice.\" Instead of looking at specific laws or court cases, you try to find the one unchanging principle of fairness that applies to all people at all times. This is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis breaks down the logic of language; it doesn\'t necessarily build a universal concept.')">A) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Justification is the process of defending a claim with evidence.')">B) Philosophical Justification</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Philosophical Abstraction is the process of removing concrete, specific details to arrive at a general or universal principle.')">C) Philosophical Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Correspondence is a theory of truth, not a mental process for concept formation.')">D) Correspondence</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 7</h2>
+        <p class="question-text">A critic hears the claim \"The song\'s lyrics are deep.\" To understand this, a philosopher breaks down what \"deep\" means in this context and whether the word is being used metaphorically or literally. This is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Philosophical analysis focuses on clarifying meanings by breaking down language and logical structure.')">A) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Correspondence would involve checking for literal depth (like a hole in the ground).')">B) Correspondence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction would be finding the universal essence of \"meaning,\" not analyzing a specific sentence.')">C) Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Science uses measurement; this is a logical and linguistic investigation.')">D) Scientific Method</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 8</h2>
+        <p class="question-text">A person refuses to eat meat. When asked why, they provide a structured argument based on the rights of sentient beings and the environmental impact of farming. This act of providing \"proof\" is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction identifies the concept of rights; it doesn\'t defend a specific choice.')">A) Philosophical Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Philosophical justification is the process of providing rational reasons or evidence to support a claim or action.')">B) Philosophical Justification</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Coherence is a theory of truth; the process of defending it is justification.')">C) Coherence Theory</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'By using structured arguments and rights, this is more formal than just sharing an opinion.')">D) Opinion Sharing</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 9</h2>
+        <p class="question-text">You trust a bridge is safe because you can see the steel beams (Correspondence), the engineering report says it meets safety codes (Coherence), and crossing it gets you to work on time (Pragmatic). This is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Abstraction deals with the essence of \"safety,\" not the practical safety of a specific bridge.')">A) Philosophical Abstraction</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! We often use multiple frameworks (matching reality, consistency, and utility) as different ways of proving truth.')">B) Ways of Proving Truth</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'This is an additive approach, not a reduction of the problem into smaller physical parts.')">C) Scientific Reductionism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Since you are using evidence and systematic reports, this is a method for finding truth.')">D) Subjective Opinion</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 10</h2>
+        <p class="question-text">A soldier is ordered to shoot an enemy prisoner. He refuses because he believes that \"murder is always wrong,\" regardless of whether it would help end the war faster. What justification is he using?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Consequentialism would argue for shooting the prisoner if it ended the war faster (better outcome).')">A) Consequentialism</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Deontology is an ethical framework where actions are justified based on universal duties or rules, regardless of the results.')">B) Deontology</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Analysis clarifies the word \"murder,\" but the soldier is using a moral rule to make a decision.')">C) Philosophical Analysis</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Synthesis would be trying to find a middle ground; the soldier is sticking to an absolute rule.')">D) Philosophical Synthesis</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 11</h2>
+        <p class="question-text">Philosophy is best defined as the use of:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Myths were what philosophy replaced with Logos (reason).')">A) Myths to explain the physical world</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Philosophy is the application of wisdom derived from knowledge and experience to address fundamental questions of life.')">B) Wisdom formed from knowledge and experience to solve problems about human living</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'This describes biology or neuroscience, which are specialized sciences, not philosophy.')">C) Scientific equipment to measure biological reactions</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Philosophy relies on reason and logic, not necessarily religious dogma.')">D) Religious doctrines to enforce social laws</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 12</h2>
+        <p class="question-text">A student is debating whether \"free will\" actually exists or if every human action is predetermined by physics. Which branch of philosophy is this?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Aesthetics concerns beauty and art.')">A) Aesthetics</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Epistemology concerns how we know things.')">B) Epistemology</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Logic concerns the structure of arguments.')">C) Logic</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Metaphysics deals with the fundamental nature of reality, including existence, causality, and free will.')">D) Metaphysics</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 13</h2>
+        <p class="question-text">A lawyer focuses on whether an argument is \"valid\"—meaning the conclusion must be true if the premises are true. This concerns:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Logic is the study of correct reasoning and the structure of valid arguments.')">A) Logic</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Ethics concerns right and wrong conduct.')">B) Ethics</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Metaphysics concerns the nature of reality.')">C) Metaphysics</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Political philosophy concerns the organization of society and government.')">D) Political Philosophy</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 14</h2>
+        <p class="question-text">Thales of Miletus is famous for moving from mythos to logos because he proposed that the arche (origin) of everything was:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Myths rely on the will of gods; Thales sought a natural explanation.')">A) The will of Zeus</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Astrology is a different system; Thales focused on a physical substance.')">B) The movement of the stars</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Thales is the first philosopher because he provided a natural explanation (Water) instead of a mythological one.')">C) Water</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Heraclitus famously proposed fire; Thales proposed water.')">D) Fire</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 15</h2>
+        <p class="question-text">Which philosopher argued that we should focus on studying natural, physical objects rather than looking for a \"perfect\" world of forms?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Plato was the Idealist who believed in the World of Forms.')">A) Plato</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Aristotle was a Realist who advocated for the study of natural objects and empirical observation.')">B) Aristotle</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Socrates focused on ethics and self-examination through questioning.')">C) Socrates</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Thales predates the debate between Idealism and Realism.')">D) Thales</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 16</h2>
+        <p class="question-text">Socrates believed that human excellence is achieved through the \"examined life,\" which primarily involves:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Natural science was Aristotle\'s primary interest.')">A) Studying the stars and tides</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Socrates emphasized that self-knowledge and virtue come from critical questioning and examination.')">B) Constant questioning to achieve virtue and self-knowledge</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Socrates often challenged state myths, which eventually led to his trial.')">C) Obeying the myths provided by the state</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Socrates sought wisdom and virtue, not political power or wealth.')">D) Accumulating power to influence society</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 17</h2>
+        <p class="question-text">In Hinduism, the ultimate goal of the soul (Atman) is to achieve liberation from the cycle of rebirth and unite with the ultimate reality (Brahman). This liberation is called:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Karma is the law of action and reaction that keeps the soul in the cycle.')">A) Karma</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Moksha is the liberation from the cycle of birth and death (Samsara).')">B) Moksha</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Nirvana is the term used in Buddhism for enlightenment.')">C) Nirvana</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'The Dao is the central concept of Daoism.')">D) The Dao</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 18</h2>
+        <p class="question-text">A practitioner of Buddhism seeks to reach \"Nirvana.\" According to this tradition, how is Nirvana achieved?</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Social order and family ties are the focus of Confucianism.')">A) By strengthening family ties and social order</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Buddhism teaches that suffering is caused by attachment; Nirvana is reached by letting go of desire.')">B) By letting go of earthly attachments and desires</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Daoism teaches to flow with the universe, not fight it.')">C) By fighting against the natural flow of the universe</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Buddhism is generally non-theistic and focuses on individual mental discipline.')">D) By performing rituals to please specific gods</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 19</h2>
+        <p class="question-text">A family-centered philosophy that believes the family is the basic unit of society and the focal point for positive social change is:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Daoism focuses on the individual\'s harmony with nature.')">A) Daoism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Hinduism focuses on the soul\'s path to liberation.')">B) Hinduism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Buddhism focuses on overcoming suffering through detachment.')">C) Buddhism</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Confucianism places family values (Filial Piety) at the center of a stable society.')">D) Confucianism</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h2>Question 20</h2>
+        <p class="question-text">The concept of \"Wei Wu Wei\" (action through non-action) suggests that humans should not fight against impermanence but should embrace the natural flow of the universe. This is a core teaching of:</p>
+        <div class="options-grid">
+            <button class="option-btn" onclick="showFeedback(this, false, 'Confucianism emphasizes active social duty and rituals.')">A) Confucianism</button>
+            <button class="option-btn" onclick="showFeedback(this, true, 'Correct! Daoism teaches Wei Wu Wei—acting in harmony with the natural flow (the Dao).')">B) Daoism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Hinduism focuses on the moral law of Karma.')">C) Hinduism</button>
+            <button class="option-btn" onclick="showFeedback(this, false, 'Buddhism focuses on the Middle Way and detachment.')">D) Buddhism</button>
+        </div>
+        <div id="feedback-box"></div>
+    </div>
+
+    <div class="slide">
+        <h1>Exam Complete!</h1>
+        <p class="question-text">Review your core concepts below for the final study phase.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.85rem;">
+            <div>
+                <strong>Theories & Methods:</strong>
+                <ul>
+                    <li>Correspondence: Matches Fact</li>
+                    <li>Coherence: Consistent Logic</li>
+                    <li>Pragmatic: Practical Results</li>
+                    <li>Deontology: Duty/Rules</li>
+                    <li>Consequentialism: Outcomes</li>
+                </ul>
+            </div>
+            <div>
+                <strong>Eastern Philosophies:</strong>
+                <ul>
+                    <li>Hinduism: Karma & Moksha</li>
+                    <li>Buddhism: Attachment & Nirvana</li>
+                    <li>Confucianism: Family & Society</li>
+                    <li>Daoism: Flow & Wei Wu Wei</li>
+                </ul>
+            </div>
+        </div>
+        <button class="nav-btn" style="margin-top: 20px; width: 100%;" onclick="currentSlide=0; showSlide(0);">Restart Exam</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const itemNumDisplay = document.getElementById('item-num');
+
+    function showSlide(index) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[index].classList.add('active');
+        itemNumDisplay.innerText = index > 0 && index < 21 ? index : (index === 0 ? "Start" : "End");
+        const fb = slides[index].querySelector('#feedback-box');
+        if(fb) { fb.style.display = 'none'; fb.innerText = ''; }
+        const buttons = slides[index].querySelectorAll('.option-btn');
+        buttons.forEach(b => { b.style.opacity = "1"; b.style.borderColor = "#edf2f7"; });
+    }
+
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; showSlide(currentSlide); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; showSlide(currentSlide); } }
+
+    function showFeedback(btn, isCorrect, text) {
+        const slide = btn.closest('.slide');
+        const fb = slide.querySelector('#feedback-box');
+        fb.style.display = 'block';
+        fb.className = isCorrect ? 'correct' : 'incorrect';
+        fb.innerHTML = (isCorrect ? "<strong>✔️ Correct:</strong> " : "<strong>❌ Incorrect:</strong> ") + text;
+        const buttons = slide.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.style.opacity = "0.7");
+        btn.style.opacity = "1";
+        btn.style.borderColor = isCorrect ? "#27ae60" : "#e74c3c";
+    }
+</script>
+
+</body>
+</html>
